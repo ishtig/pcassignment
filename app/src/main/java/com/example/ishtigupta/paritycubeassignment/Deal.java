@@ -5,17 +5,29 @@ package com.example.ishtigupta.paritycubeassignment;
  */
 public class Deal {
 
-    public String dealTitle, imgUrl, description;
+    public String dealTitle, imgUrl, detail;
 
     public String getDealTitle(){
         return dealTitle;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public void setDealTitle(String dealTitle) {
+        this.dealTitle = dealTitle;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
