@@ -1,31 +1,20 @@
 package com.example.ishtigupta.paritycubeassignment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -39,6 +28,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     TabsPagerAdapter mTabsPagerAdapter;
+    public static JSONObject allDealsJsonObject;
+    public static ImageLoader imageLoader;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -49,6 +40,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //initialize image loader for caching of images
+        initializeImageLoader();
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -83,8 +77,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mTabsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
     }
 
+    private void initializeImageLoader() {
+
+        if (imageLoader != null) {
+            imageLoader.destroy();
+        }
+
+        imageLoader = ImageLoader.getInstance();
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                MainActivity.this).threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024)
+                        // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO).build();
+        imageLoader.init(config);
+    }
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {

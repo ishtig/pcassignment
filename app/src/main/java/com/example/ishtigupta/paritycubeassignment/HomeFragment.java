@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,8 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+    private int sectionNumber;
+
     public HomeFragment() {// makeHttpRequest("",new ArrayList<NameValuePair>());
     }
 
@@ -47,10 +48,13 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        Bundle b = getArguments();
+        sectionNumber = b.getInt(ARG_SECTION_NUMBER);
+
         ListView listView = (ListView) rootView.findViewById(R.id.deals_list_view);
-        adapter = new DealsListAdapter(getActivity(), null);
+        adapter = new DealsListAdapter(getActivity(), null, MainActivity.imageLoader);
         listView.setAdapter(adapter);
-        JSONObject jsonObject;
+
         new FetcherAsyncTask().execute(ApiJsonFetcher.DEALS_URL);
 
         return rootView;
@@ -58,30 +62,37 @@ public class HomeFragment extends Fragment {
 
     public class FetcherAsyncTask extends AsyncTask<String, Void, Void> {
         private final ProgressDialog dialog = new ProgressDialog(getActivity());
-        JSONObject jsonObject;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setIndeterminate(true);
+            dialog.setMessage("Loading....");
             dialog.show();
         }
 
         @Override
         protected Void doInBackground(String urls[]) {
-            List<NameValuePair> params;
-            params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("accept", "application/json"));
-            params.add(new BasicNameValuePair("accept", "text/javascript"));
-            jsonObject = new ApiJsonFetcher().makeHttpRequest(urls[0], new ArrayList<NameValuePair>());
+            if (MainActivity.allDealsJsonObject == null) {
+                List<NameValuePair> params;
+                params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("accept", "application/json"));
+                params.add(new BasicNameValuePair("accept", "text/javascript"));
+                MainActivity.allDealsJsonObject = new ApiJsonFetcher().makeHttpRequest(urls[0], new ArrayList<NameValuePair>());
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void o) {
             super.onPostExecute(o);
+            DealsParser parser = new DealsParser(MainActivity.allDealsJsonObject);
+            if (sectionNumber == 1)
+                adapter.changeCursor(parser.getTopDealsCursor());
+            else if (sectionNumber == 2)
+                adapter.changeCursor(parser.getPopularDealsCursor());
             dialog.dismiss();
-            DealsParser parser = new DealsParser(jsonObject);
-            adapter.changeCursor( parser.getTopDealsCursor());
             adapter.notifyDataSetChanged();
         }
 

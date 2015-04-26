@@ -7,7 +7,7 @@ public class Deal {
 
     public String dealTitle, imgUrl, detail;
 
-    public String getDealTitle(){
+    public String getDealTitle() {
         return dealTitle;
     }
 
