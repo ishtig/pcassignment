@@ -25,6 +25,7 @@ import java.util.List;
 public class ApiJsonFetcher {
 
     public static final String DEALS_URL = "http://www.desidime.com/api/v1/premium_deals/list/";
+
     public JSONObject makeHttpRequest(String url,
                                       List<NameValuePair> params) {
 
@@ -62,7 +63,6 @@ public class ApiJsonFetcher {
             }
             is.close();
             json = sb.toString();
-            Log.v("response", sb.toString());
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
