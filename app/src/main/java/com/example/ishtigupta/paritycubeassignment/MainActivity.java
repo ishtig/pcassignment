@@ -1,6 +1,5 @@
 package com.example.ishtigupta.paritycubeassignment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -9,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -77,7 +75,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mTabsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-
     }
 
     private void initializeImageLoader() {
