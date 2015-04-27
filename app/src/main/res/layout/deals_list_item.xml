@@ -4,14 +4,14 @@
     android:layout_height="100dp"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="@dimen/list_item_margins">
 
     <ImageView
         android:id="@+id/deal_thumbnail"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/list_item_image_view_height"
+        android:layout_height="@dimen/list_item_image_view_width"
         android:layout_alignParentLeft="true"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/list_item_margins"
         android:scaleType="centerInside"
         android:src="@drawable/paritycube" />
 
@@ -19,7 +19,7 @@
         android:id="@+id/deal_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/list_item_margins"
         android:textStyle="bold"
         android:layout_toRightOf="@id/deal_thumbnail" />
 
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/deal_title"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/list_item_margins"
         android:maxLines="2"
         android:layout_toRightOf="@id/deal_thumbnail" />
 </RelativeLayout>

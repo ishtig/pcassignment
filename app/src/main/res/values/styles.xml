@@ -4,12 +4,12 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
-        <item name="android:actionMenuTextColor">@drawable/tab_text_color_selector</item>
+        <item name="android:actionBarTabTextStyle">@style/TabTextStyle</item>
 
         <!-- Support library compatibility -->
-        <item name="actionMenuTextColor">@drawable/tab_text_color_selector</item>
         <item name="actionBarTabStyle">@style/MyActionBarTabs</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarTabTextStyle">@style/TabTextStyle</item>
     </style>
 
     <!-- ActionBar styles -->
@@ -23,14 +23,22 @@
     <!-- ActionBar tabs styles -->
     <style name="MyActionBarTabs" parent="@style/Widget.AppCompat.ActionBar.TabView">
         <!-- tab indicator -->
-        <item name="android:background">@drawable/actionbar_tab_indicator</item>
-
+        <item name="android:background">@drawable/actionbar_tab_selector</item>
         <!-- Support library compatibility -->
-        <item name="background">@drawable/actionbar_tab_indicator</item>
+        <item name="background">@drawable/actionbar_tab_selector</item>
+    </style>
+
+
+
+    <!-- action bar tab text -->
+    <style name="TabTextStyle"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@drawable/tab_text_color_selector</item>
     </style>
 
     <color name="BLACK">#000000</color>
     <color name="WHITE">#FFFFFF</color>
     <color name="BLUE">#37A6E1</color>
     <color name="RED">#E43A43</color>
+    <color name="list_view_background">#DDDDDD</color>
 </resources>

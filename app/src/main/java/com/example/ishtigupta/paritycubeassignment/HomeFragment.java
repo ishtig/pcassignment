@@ -1,6 +1,9 @@
 package com.example.ishtigupta.paritycubeassignment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -60,7 +64,16 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    public class FetcherAsyncTask extends AsyncTask<String, Void, Void> {
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+
+    public class FetcherAsyncTask extends AsyncTask<String, Void, Boolean> {
         private final ProgressDialog dialog = new ProgressDialog(getActivity());
 
         @Override
@@ -73,7 +86,28 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        protected Void doInBackground(String urls[]) {
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if (aBoolean) {
+                DealsParser parser = new DealsParser(MainActivity.allDealsJsonObject);
+                if (sectionNumber == 1)
+                    adapter.changeCursor(parser.getTopDealsCursor());
+                else if (sectionNumber == 2)
+                    adapter.changeCursor(parser.getPopularDealsCursor());
+                adapter.notifyDataSetChanged();
+            } else {
+                Toast toast = Toast.makeText(getActivity(), "Internet connection not available!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+            dialog.dismiss();
+        }
+
+        @Override
+        protected Boolean doInBackground(String urls[]) {
+            if (!isNetworkAvailable())
+                return false;
+
             if (MainActivity.allDealsJsonObject == null) {
                 List<NameValuePair> params;
                 params = new ArrayList<NameValuePair>();
@@ -81,22 +115,7 @@ public class HomeFragment extends Fragment {
                 params.add(new BasicNameValuePair("accept", "text/javascript"));
                 MainActivity.allDealsJsonObject = new ApiJsonFetcher().makeHttpRequest(urls[0], new ArrayList<NameValuePair>());
             }
-            return null;
+            return true;
         }
-
-        @Override
-        protected void onPostExecute(Void o) {
-            super.onPostExecute(o);
-            DealsParser parser = new DealsParser(MainActivity.allDealsJsonObject);
-            if (sectionNumber == 1)
-                adapter.changeCursor(parser.getTopDealsCursor());
-            else if (sectionNumber == 2)
-                adapter.changeCursor(parser.getPopularDealsCursor());
-            dialog.dismiss();
-            adapter.notifyDataSetChanged();
-        }
-
     }
-
-
 }

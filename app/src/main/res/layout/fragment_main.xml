@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DDDDDD"
     tools:context=".MainActivity$PlaceholderFragment">
 
     <TextView
@@ -11,11 +10,12 @@
         android:layout_height="wrap_content" />
 
     <ListView
+        android:background="@color/list_view_background"
         android:id="@+id/deals_list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
+        android:layout_margin="@dimen/list_view_margin"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"></ListView>
+        android:dividerHeight="@dimen/list_view_divider_height"></ListView>
 
 </RelativeLayout>
